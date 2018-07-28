@@ -1,27 +1,26 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 
-const mongoose = require('./mongoose.js');
-const {User} = require('./../db/user.js');
-const {Todo} = require('./../db/todo.js');
+const mongoose = require('./../db/mongoose.js');
+const {User} = require('./../model/user.js');
+const {Todo} = require('./../model/todo.js');
+const {setPostRoute} = require('./post.js');
+const {setGetRoute} = require('./get.js');
 
 const app = express();
 
+app.use(((req,res,next)=>{
+  //console.log("URL: ",req.originalUrl);
+  next();
+}));
 app.use(bodyParser.json());
+setGetRoute(app);
+setPostRoute(app);
 
-app.post('/todos',(req,res)=>{
-  const todo = new Todo({
-    text: req.body.text
-  })
 
-  todo.save().then(
-    (doc)=>{res.send(doc)},
-    (err)=>{res.status(400).send(err)}
-  )
-})
-
-app.listen(3000,()=>{
-  console.log('server is listening on port 3000');
+const {PORT=3000} = process.env;
+app.listen(PORT,()=>{
+  console.log(`server is listening on port ${PORT}`);
 })
 
 module.exports = {app};
