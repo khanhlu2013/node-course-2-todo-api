@@ -7,17 +7,19 @@ const {Todo} = require('./../model/todo.js');
 const {setPostRoute} = require('./post.js');
 const {setGetRoute} = require('./get.js');
 const {setDeleteRoute} = require('./delete.js');
-
+const {setPatchRoute} = require('./patch.js');
 const app = express();
 
 app.use(((req,res,next)=>{
   //console.log("URL: ",req.originalUrl);
   next();
 }));
+
 app.use(bodyParser.json());
 setGetRoute(app);
 setPostRoute(app);
 setDeleteRoute(app);
+setPatchRoute(app);
 
 const {PORT=3000} = process.env;
 app.listen(PORT,()=>{

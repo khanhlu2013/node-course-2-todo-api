@@ -15,7 +15,7 @@ setDeleteRoute = (app)=>{
             }
 
             res.send({doc});
-        });
+        }).catch(e=>{res.status(400).send()})
     })
 };
 
