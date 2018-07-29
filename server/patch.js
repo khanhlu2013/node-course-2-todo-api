@@ -16,8 +16,6 @@ const setPatchRoute = (app)=>{
         }else{
             param.completedAt = null;
         }
-
-        console.log(JSON.stringify(param,undefined,2));
         Todo.findByIdAndUpdate(id,param,{new:true}).then(doc=>{
             if(!doc){
                 return res.status(404).send();

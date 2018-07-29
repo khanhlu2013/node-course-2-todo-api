@@ -1,3 +1,4 @@
+require('./../config/config.js');
 const express = require('express');
 const bodyParser = require('body-parser');
 
@@ -21,9 +22,8 @@ setPostRoute(app);
 setDeleteRoute(app);
 setPatchRoute(app);
 
-const {PORT=3000} = process.env;
-app.listen(PORT,()=>{
-  console.log(`server is listening on port ${PORT}`);
+app.listen(process.env.PORT,()=>{
+  console.log(`server is listening on port ${process.env.PORT}`);
 })
 
 module.exports = {app};
