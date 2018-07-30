@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
+const {Schema} = require('mongoose');
+const jwt = require('jsonwebtoken');
 
-const Todo = mongoose.model('Todo',{
+const todoSchema = new Schema({
   text : {
     type : String,
     require : true,
@@ -16,5 +18,7 @@ const Todo = mongoose.model('Todo',{
     default : null
   }
 });
+
+const Todo = mongoose.model('Todo',todoSchema);
 
 module.exports = {Todo};

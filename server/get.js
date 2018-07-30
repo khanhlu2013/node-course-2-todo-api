@@ -1,5 +1,7 @@
 const {Todo} = require('./../model/todo.js');
+const {User} = require('./../model/user.js');
 const {ObjectID} = require('mongodb');
+const {authenticate} = require('./../middleware/authenticate.js');
 
 setGetRoute = (app)=>{
   app.get('/todos',(req,res)=>{
@@ -28,6 +30,15 @@ setGetRoute = (app)=>{
       }
     })();
   });
+
+  app.get('/users',(req,res)=>{
+    User.find().then(users=>res.send({users}))
+    .catch(e=>res.status(400));
+  });
+
+  app.get('/users/me',authenticate,(req,res)=>{
+    res.send(req.user);
+  })
 };
 
 module.exports = {setGetRoute}
