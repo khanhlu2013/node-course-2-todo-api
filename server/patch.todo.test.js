@@ -5,11 +5,11 @@ const {ObjectID} = require('mongodb');
 const {Todo} = require('./../model/todo.js');
 const {app} = require('./server.js');
 
-beforeEach(done=>{
-    Todo.find().remove().then(()=>done()).catch(e=>done(e));
-})
-
 describe('PATCH /todos/:id',()=>{
+
+    beforeEach(done=>{
+        Todo.find().remove().then(()=>done()).catch(e=>done(e));
+    })
 
     const todos = [
         {_id:new ObjectID(),text:"x"},

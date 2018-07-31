@@ -5,11 +5,11 @@ const {ObjectID} = require('mongodb');
 const {Todo} = require('./../model/todo.js');
 const {app} = require('./server.js');
 
-beforeEach(done=>{
-  Todo.remove({}).then(()=>done());
-});
-
 describe('POST /todos',()=>{
+  beforeEach(done=>{
+    Todo.remove({}).then(()=>done());
+  });
+
   it('should save todo',(done)=>{
     const text = 'Test todo text';
     request(app)

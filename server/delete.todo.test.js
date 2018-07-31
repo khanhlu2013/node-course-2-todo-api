@@ -5,11 +5,13 @@ const {ObjectID} = require('mongodb');
 const {Todo} = require('./../model/todo.js');
 const {app} = require('./server.js');
 
-beforeEach(done=>{
-  Todo.remove({}).then(()=>done());
-});
+
 
 describe('DELETE /todos/:id',()=>{
+    beforeEach(done=>{
+        Todo.remove({}).then(()=>done());
+      });
+          
     const id = new ObjectID();
     const text = 'todo to be deleted';
     beforeEach(done=>{

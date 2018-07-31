@@ -5,11 +5,13 @@ const {ObjectID} = require('mongodb');
 const {Todo} = require('./../model/todo.js');
 const {app} = require('./server.js');
 
-beforeEach(done=>{
-  Todo.remove({}).then(()=>done());
-});
+
 
 describe('GET /todos',()=>{
+  beforeEach(done=>{
+    Todo.remove({}).then(()=>done());
+  });
+    
   const todos = ['todo 1','todo 2'];
   beforeEach(done=>{
     Todo.insertMany(todos.map(text=>({text}))).then(
@@ -33,7 +35,10 @@ describe('GET /todos',()=>{
 });
 
 describe('GET /todos/:id',()=>{
-  
+  beforeEach(done=>{
+    Todo.remove({}).then(()=>done());
+  });
+    
   const id = new ObjectID();
   const notFoundId = new ObjectID();
 
