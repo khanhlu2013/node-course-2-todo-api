@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 const {app} = require('./server.js');
 const {User} = require('./../model/user.js');
 
-describe('POST /users',()=>{
+describe('POST /users: Sign up users',()=>{
 
   beforeEach(done=>{
     User.remove().then(()=>done())
@@ -71,5 +71,56 @@ describe('POST /users',()=>{
       .expect(400)
       .end(done);
     })();
+  })
+});
+
+describe('POST /users/login: Login user',()=>{
+  const email = 'khanh@lu.com';
+  const password = '123456';
+
+  beforeEach(done=>{
+    (async ()=>{
+      try{
+        await User.remove();
+        const user = await new User({email,password}).save();
+        done();
+      }catch(e){
+        done(e);
+      }
+    })();
+  })
+
+  it('should login user',(done)=>{
+    request(app)
+    .post('/users/login')
+    .send({email,password})
+    .expect(200)
+    .end((err,res)=>{
+      if(err){
+        return done(err);
+      }
+
+      (async ()=>{
+        try{
+          expect(res.header['x-auth']).toBeTruthy();
+          const user = await User.findByToken(res.header['x-auth']);
+          expect(user).toBeTruthy();
+          done();
+        }catch(e){
+          done(e);
+        }
+      })();
+    })
+  });
+
+  it('should return 401 if credential is not valid',(done)=>{
+    request(app)
+    .post('/users/login')
+    .send({email,password:'wrong password'})
+    .expect(401)
+    .expect(res=>{
+      expect(res.header['x-auth']).toBeFalsy();
+    })
+    .end(done);
   })
 })

@@ -32,7 +32,7 @@ const UserSchema = new mongoose.Schema({
     }
   }]
 });
-UserSchema.methods.attachAuthToken = function(){
+UserSchema.methods.generateAuthToken = function(){
   const user = this;
   const access = "auth";
   const token = jwt.sign({
@@ -47,6 +47,16 @@ UserSchema.methods.toJSON = function(){
   const userObject = user.toObject();
   return _.pick(userObject,["_id", "email"]);
 }
+UserSchema.methods.removeToken = function(token){
+  return (async()=>{
+    const user = this;
+    const result = await user.update({
+      $pull:{
+        tokens : {token}
+      }
+    });
+  })();
+}
 UserSchema.statics.findByToken = function(token){
   const User = this;
 
@@ -60,6 +70,19 @@ UserSchema.statics.findByToken = function(token){
   }catch(err){
     return Promise.reject();
   }
+}
+UserSchema.statics.findByCredential = function(email,password){
+  const User = this;
+  return (async ()=>{
+    const user = await User.findOne({email});
+    const result = await bcrypt.compare(password,user.password);
+
+    if(result){
+      return user;
+    }else{
+      return null;
+    }
+  })();
 }
 UserSchema.pre('save',function(next){
   (async ()=>{
